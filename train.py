@@ -83,8 +83,8 @@ def evaluate(model, testloader, criterion, device):
     return avg_loss, accuracy
 
 
-def save_checkpoint(model, optimizer, scheduler, epoch,
-                    path="/content/drive/MyDrive/DenseNet_Project/checkpoints"):
+def save_checkpoint(model, optimizer, scheduler, epoch, dataset_name="cifar10",
+                    base_path="/content/drive/MyDrive/DenseNet_Project/results"):
     """
     Lưu trạng thái huấn luyện (checkpoint) ra file .pth.
 
@@ -93,8 +93,10 @@ def save_checkpoint(model, optimizer, scheduler, epoch,
         optimizer: Bộ tối ưu.
         scheduler: Bộ điều chỉnh learning rate.
         epoch (int): Epoch hiện tại.
-        path (str): Đường dẫn thư mục lưu checkpoint.
+        dataset_name (str): Tên dataset để phân biệt thư mục lưu.
+        base_path (str): Đường dẫn gốc trên Drive.
     """
+    path = f"{base_path}/{dataset_name}/checkpoints"
     os.makedirs(path, exist_ok=True)
     checkpoint = {
         'epoch': epoch,
@@ -103,4 +105,4 @@ def save_checkpoint(model, optimizer, scheduler, epoch,
         'scheduler_state_dict': scheduler.state_dict()
     }
     torch.save(checkpoint, f"{path}/model_epoch_{epoch}.pth")
-    print(f"💾 Đã lưu Checkpoint an toàn tại epoch {epoch}")
+    print(f"💾 Đã lưu Checkpoint [{dataset_name.upper()}] tại epoch {epoch}")
